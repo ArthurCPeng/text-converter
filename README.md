@@ -7,6 +7,8 @@ The blocks of text are separated by separators and empty lines.
 
 The converted text is outputted as a file. The first 10 characters are used as the file name. If the file name already exists, the original file is overwritten. 
 
+To ensure proper alignment, any Arabic numerals are replaced with Chinese characters, and any English punctuation marks are replaced by their Chinese counterpart. 
+
 Several parameters can be specified in the conversion. All numeric inputs must be integers.
 - rows: the number of rows, or the number of non-space characters in each column 
 - columns: the number of columns, or the number of non-space characters in each row
