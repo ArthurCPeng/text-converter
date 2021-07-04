@@ -5,7 +5,7 @@ The full text inputted into the program is converted into blocks of text, with a
 
 The blocks of text are separated by separators and empty lines.
 
-The converted text is outputted as a file. The first 10 characters are used as the file name. If the file name already exists, the original file is overwritten. 
+The converted text is outputted as a file. The characters before the first return, space, dot or comma, or the first 10 characters are used as the file name. If the file name already exists, the original file is overwritten. 
 
 To ensure proper alignment, any Arabic numerals are replaced with Chinese characters, and any English punctuation marks are replaced by their Chinese counterpart. 
 
