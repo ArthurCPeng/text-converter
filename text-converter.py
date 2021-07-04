@@ -6,6 +6,7 @@ spacing = 1
 default_rows = 10
 default_columns = 10
 
+#Default values
 default_separation_distance = 1
 default_separator_length = 15
 default_separator_marker = '*'
@@ -14,7 +15,7 @@ direction = 'right to left'
 
 root = Tk()
 root.geometry('800x600')
-root.title('Text Converter-竖排文本')
+root.title('Text Converter')
 
 frame1 = Frame(root)
 frame2 = Frame(root)
@@ -33,8 +34,7 @@ columns = Entry(frame1, width = 20)
 columns.grid(row = 1, column = 1)
 
 
-
-
+#Functions to change the direction of the vertical text
 def left_right():
     global direction
     direction = 'left to right'
@@ -50,8 +50,6 @@ left_to_right_button.grid(row = 1, column = 2)
 
 right_to_left_button = Button(frame1, text = 'right to left', width = 10, command = right_left)
 right_to_left_button.grid(row = 1, column = 3)
-
-
 
 
 
@@ -75,10 +73,11 @@ separation_marker.grid(row = 1, column = 2)
 
 
 entrybox = Text(frame3, width = 100, height = 35)
-#entrybox.place(width = 100, height = 100)
 entrybox.pack()
 
 def callback():
+
+    #If no values are specified in the interface, default values are used
     if rows.get() == '':
         row = default_rows
     else:
@@ -105,40 +104,48 @@ def callback():
         sep_marker = separation_marker.get()
 
     page_chars = row * column
-    #print(page_chars)
 
-    
+    #Get the text from the entrybox
     text = entrybox.get(1.0,END)
+
     
-
-    first_space = text.find(' ')
-    first_dot = text.find('.')
+    #Extract the characters before the first return, space, period or comma as the title, whichever comes first.
     first_return = text.find('\n')
+    first_space = text.find(' ')
+    first_dot = text.find('。')
+    first_comma = text.find('，')
 
-    if first_return != -1:
-        title_end = first_return
-    elif first_space != -1:
-        title_end = first_space
-    elif first_dot != -1:
-        title_end = first_dot
+
+    #If there are no returns, spaces or dots, extract the first 10 characters as title
+    if first_return == -1 and first_space == -1 and first_dot == -1 and first_comma == -1:
+        title_end = 10
     else:
+        indexes = []
+        for index in [first_return, first_space, first_dot, first_comma]:
+            if index != -1:
+                indexes.append(index)
+            
+        title_end = min(indexes)
+
+
+    #If the resulting title is over 20 characters long, extract the first 10 characters as the title.
+    #If the resulting title is an empty string, extract the first 5 characters as the title.
+    if title_end > 20:
         title_end = 10
-
-    if title_end > 15:
-        title_end = 10
-
- 
-
+    elif title_end < 1:
+        title_end = 5
 
     title = text[0:title_end]
     title = title.replace('/','-')
-    
+
+    #Remove spaces and new lines
     text = text.replace('\n','')
     text = text.replace(' ','')
+
+    #Replace English punctuation with Chinese punctuation
     text = text.replace(',','，')
     text = text.replace('\'','‘')
     text = text.replace('\"','”')
-    
     text = text.replace(':','：')
     text = text.replace(')','）')
     text = text.replace('(','（')
@@ -147,19 +154,7 @@ def callback():
     text = text.replace('!','！')
     text = text.replace('?]','？')
 
-    
-    '''
-
-    for m in range(1,10):
-        for n in range(0,10):
-            if str(m)+str(n)+'日' in text or str(m)+str(n)+'月' in text:
-                text = text.replace(str(m)+str(n)+'日', 
-                time_start = text.find(str(m)+str(n)+'日')
-                time_end =
-    '''
-    
-
-
+    #Replace Arabic numerals with Chinese characters
     text = text.replace('0','零')
     text = text.replace('1','一')
     text = text.replace('2','二')
@@ -171,10 +166,6 @@ def callback():
     text = text.replace('8','八')
     text = text.replace('9','九')
 
-    
-
-
-
     pages = int(len(text)/page_chars)+1
      
     text_list = []
@@ -184,25 +175,24 @@ def callback():
 
     for i in range(0,pages-1):
         text_list.append(text[i*page_chars:(i+1)*page_chars])
-        #print(text[i*page_chars:(i+1)*page_chars])
 
     final_text = text[(pages-1)*page_chars:len(text)]
-    
+
+    #For text blocks whose length are smaller than the pre-specified length of row*column,
+    #pad with either Chinese commas (right to left) or spaces (left to right), to ensure alignment
     if direction == 'right to left':
         final_text = final_text[:] + '。'*(page_chars-len(final_text))
     if direction == 'left to right':
         final_text = final_text[:] + ' '*(page_chars-len(final_text))
         
     text_list.append(final_text)
-    #print(len(final_text))
 
         
-
+    #Convert text into vertical orientation, block by block
     for page_text in text_list:
         page_text_converted = ''
         for j in range(0,row):
             for i in range(0,column):
-                #print(len(page_text))
                 if direction == 'left to right':
                     page_text_converted += page_text[i * row + j ]
                 if direction == 'right to left':
@@ -210,28 +200,20 @@ def callback():
                 if spacing == 1:
                     page_text_converted += ' '*space_width
 
-            #while '  ' in page_text_converted:
-                #page_text_converted = page_text_converted.replace('  ',' ')
-            #page_text_converted = page_text_converted.replace(' ',' '*space_width)
             
             page_text_converted += '\n'
 
         converted_text += page_text_converted
-        
+
+        #Add separators and new lines
         converted_text += sep_distance*'\n'
         converted_text += sep_length*sep_marker
         converted_text += (sep_distance+1)*'\n'
-
-    
 
     file = open(title,'w')
     file.write(converted_text)
     file.close()
     print('Converted!')
-    
-    #print(text)
-
-    
     
 
 convert = Button(frame3,text = 'convert', width = 20, command = callback)
