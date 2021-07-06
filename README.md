@@ -10,9 +10,9 @@ The converted text is outputted as a file. The characters before the first retur
 To ensure proper alignment, any Arabic numerals are replaced with Chinese characters, and any English punctuation marks are replaced by their Chinese counterpart. 
 
 Several parameters can be specified in the conversion. All numeric inputs must be integers.
-- rows: the number of rows, or the number of non-space characters in each column 
-- columns: the number of columns, or the number of non-space characters in each row
-- left to right / right to left: specify whether the outputted text is to be read from left to right or right to left
-- separation distance: the number of lines added before and after each line of separators
-- separator length: the length of (or number of characters contained in) each separator line
-- separator marker: what symbol to use as the separator (e.g. "*")
+- **rows**: the number of rows, or the number of non-space characters in each column.  
+- **columns**: the number of columns, or the number of non-space characters in each row.  
+- **left to right / right to left**: specify whether the outputted text is to be read from left to right or right to left.  
+- **separation distance**: the number of lines added before and after each line of separators.  
+- **separator length**: the length of (or number of characters contained in) each separator line.  
+- **separator marker**: what symbol to use as the separator (e.g. "*").  
